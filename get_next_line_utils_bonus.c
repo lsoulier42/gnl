@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: louise <lsoulier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 21:16:18 by louise            #+#    #+#             */
-/*   Updated: 2020/11/01 01:40:20 by louise           ###   ########.fr       */
+/*   Updated: 2020/11/01 02:00:51 by louise           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int			set_begin_line(char *buff, char **line_begin)
 {
@@ -28,7 +28,7 @@ int			set_begin_line(char *buff, char **line_begin)
 		if (buff[offset] == '\n')
 			offset++;
 		while (offset + nb_char < BUFFER_SIZE && buff[offset + nb_char]
-			&& buff[offset + nb_char] != '\n')
+				&& buff[offset + nb_char] != '\n')
 			nb_char++;
 	}
 	if (!(*line_begin = (char*)malloc(sizeof(char) * (nb_char + 1))))
@@ -100,4 +100,30 @@ int			read_file(int fd, char *buff, char **line)
 			return (1);
 	}
 	return (0);
+}
+
+t_list_file	*get_or_put_buffer(int fd, t_list_file **first)
+{
+	t_list_file	*current;
+	t_list_file	*previous;
+
+	current = *first;
+	previous = NULL;
+	while (current)
+	{
+		if (current->fd == fd)
+			return (current);
+		previous = current;
+		current = current->next;
+	}
+	if (!(current = (t_list_file*)malloc(sizeof(t_list_file))))
+		return (NULL);
+	current->fd = fd;
+	*(current->buff) = '\0';
+	current->next = NULL;
+	if (!previous)
+		*first = current;
+	else
+		previous->next = current;
+	return (current);
 }
