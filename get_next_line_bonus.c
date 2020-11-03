@@ -6,7 +6,7 @@
 /*   By: louise <lsoulier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 23:46:57 by louise            #+#    #+#             */
-/*   Updated: 2020/11/01 01:59:39 by louise           ###   ########.fr       */
+/*   Updated: 2020/11/03 17:24:57 by louise           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ int		get_next_line(int fd, char **line)
 		gnl_return = move_buff(current->buff, offset);
 	if (gnl_return == 0)
 		remove_fd(&first, current);
+	else if (gnl_return == -1)
+		*line = NULL;
 	return (gnl_return);
 }
