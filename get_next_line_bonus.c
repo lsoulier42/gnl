@@ -6,7 +6,7 @@
 /*   By: louise <lsoulier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 23:46:57 by louise            #+#    #+#             */
-/*   Updated: 2020/11/03 17:24:57 by louise           ###   ########.fr       */
+/*   Updated: 2020/11/16 21:58:53 by louise           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		get_next_line(int fd, char **line)
 	int					offset;
 	int					gnl_return;
 
-	if (fd < 0 || !line)
+	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	current = get_or_put_buffer(fd, &first);
 	offset = set_begin_line(current->buff, line);
