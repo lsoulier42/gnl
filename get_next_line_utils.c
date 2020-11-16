@@ -5,99 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: louise <lsoulier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/26 21:16:18 by louise            #+#    #+#             */
-/*   Updated: 2020/11/03 17:22:54 by louise           ###   ########.fr       */
+/*   Created: 2020/11/16 15:55:22 by louise            #+#    #+#             */
+/*   Updated: 2020/11/16 16:45:15 by louise           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int			set_begin_line(char *buff, char **line_begin)
+size_t	ft_strlen(const char *s)
 {
-	int		i;
-	int		offset;
-	int		nb_char;
+	size_t i;
 
-	i = -1;
-	offset = 0;
-	nb_char = 0;
-	if (*buff != '\0')
-	{
-		while (offset < BUFFER_SIZE && buff[offset] != '\n')
-			offset++;
-		if (buff[offset] == '\n')
-			offset++;
-		while (offset + nb_char < BUFFER_SIZE && buff[offset + nb_char]
-			&& buff[offset + nb_char] != '\n')
-			nb_char++;
-	}
-	if (!(*line_begin = (char*)malloc(sizeof(char) * (nb_char + 1))))
-		return (0);
-	while (++i < nb_char)
-		(*line_begin)[i] = buff[offset + i];
-	(*line_begin)[i] = '\0';
-	if (offset + nb_char < BUFFER_SIZE && buff[offset + nb_char] == '\n')
-		return (offset);
-	return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-char		*join_buff(char *line, char *buff, int buff_len)
+void	*ft_calloc(size_t count, size_t size)
 {
-	char	*new;
-	int		i;
-	int		j;
-	int		line_len;
+	unsigned char	*mem_block;
+	size_t			i;
 
 	i = -1;
-	j = -1;
-	line_len = 0;
-	while (line[line_len])
-		line_len++;
-	if (!(new = (char*)malloc(sizeof(char) * (line_len + buff_len + 1))))
+	if (!(mem_block = (unsigned char*)malloc(size * count)))
 		return (NULL);
-	while (++i < line_len)
-		new[i] = line[i];
-	free(line);
-	while (++j < buff_len)
-		new[i + j] = buff[j];
-	new[i + j] = '\0';
-	return (new);
+	while (++i < count * size)
+		mem_block[i] = 0;
+	return ((void*)mem_block);
 }
 
-int			move_buff(char *buff, int offset)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-	int i;
-	int j;
+	size_t	dstlen;
+	size_t	srclen;
+	size_t	i;
 
-	i = -1;
-	j = -1;
-	while (offset + ++i < BUFFER_SIZE)
-		buff[i] = buff[offset + i];
-	while (i < BUFFER_SIZE)
-		buff[i++] = '\0';
-	while (buff[++j])
-		if (buff[j] == '\n')
-			return (1);
-	return (0);
-}
-
-int			read_file(int fd, char *buff, char **line)
-{
-	int len;
-	int read_val;
-
-	while ((read_val = read(fd, buff, BUFFER_SIZE)) != 0)
+	dstlen = 0;
+	srclen = 0;
+	i = 0;
+	while (dst[dstlen])
+		dstlen++;
+	while (src[srclen])
+		srclen++;
+	if (dstsize == 0 || dstsize <= dstlen)
+		return (srclen + dstsize);
+	while (i < srclen && i < dstsize - dstlen - 1)
 	{
-		if (read_val == -1)
-			return (-1);
-		len = 0;
-		while (len < read_val && buff[len] != '\n')
-			len++;
-		if (read_val < BUFFER_SIZE)
-			buff[read_val] = '\0';
-		*line = join_buff(*line, buff, len);
-		if (len != BUFFER_SIZE && len != read_val)
-			return (1);
+		dst[dstlen + i] = src[i];
+		i++;
 	}
-	return (0);
+	dst[dstlen + i] = '\0';
+	return (dstlen + srclen);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+	size_t	src_len;
+
+	i = 0;
+	src_len = 0;
+	if (src)
+	{
+		src_len = ft_strlen(src);
+		if (dstsize > 0)
+		{
+			while (src[i] && (i < (dstsize - 1)))
+			{
+				dst[i] = src[i];
+				i++;
+			}
+			dst[i] = '\0';
+		}
+	}
+	return (src_len);
 }
